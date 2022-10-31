@@ -10,12 +10,20 @@
     "esbuild": "^0.15.12",
     "typescript": "^4.8.4"
   },
-  "name": "parse-json-stream",
+  "name": "@andrewperson/parse-json-stream",
   "description": "Allows you to sequentially parse JSON from an incoming stream",
   "version": "0.0.1",
   "main": "parse-json-stream.js",
   "author": "",
   "license": "ISC",
   "types": "./parse-json-stream.d.ts",
-  "type": "module"
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndrewPerson/Parse-JSON-Stream.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AndrewPerson/Parse-JSON-Stream/issues"
+  },
+  "homepage": "https://github.com/AndrewPerson/Parse-JSON-Stream#readme"
 }
