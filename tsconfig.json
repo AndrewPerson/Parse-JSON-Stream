@@ -1,0 +1,8 @@
+{
+    "include": ["*.ts"],
+    "compilerOptions": {
+        "strict": true,
+        "skipLibCheck": true,
+        "strictPropertyInitialization": false
+    } 
+}

@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "build": "npx esbuild ./parse-json-stream.ts --outfile=parse-json-stream.js --bundle --format=esm --minify && npx tsc -d --emitDeclarationOnly parse-json-stream.ts"
+  },
+  "dependencies": {
+    "esbuild-linux-64": "^0.15.12"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.12",
+    "typescript": "^4.8.4"
+  },
+  "name": "parse-json-stream",
+  "description": "Allows you to sequentially parse JSON from an incoming stream",
+  "version": "0.0.1",
+  "main": "parse-json-stream.js",
+  "author": "",
+  "license": "ISC",
+  "types": "./parse-json-stream.d.ts",
+  "type": "module"
+}
