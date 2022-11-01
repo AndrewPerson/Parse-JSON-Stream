@@ -29,8 +29,7 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npx esbuild ./parse-json-stream.ts --outfile=parse-json-stream.js --bundle --format=esm --minify
-      - run: npx tsc -d --emitDeclarationOnly parse-json-stream.ts
+      - run: npm run build
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
