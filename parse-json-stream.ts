@@ -296,7 +296,7 @@ export function parseJSONStream(objectPaths: string[][]) {
     let totalBuffer = new Uint8Array(0);
     let indexOffset = 0;
 
-    let objectCallbacks: ((path: string[], value: any) => void)[] = [];
+    let objectCallbacks: ((path: string[], value: string) => void)[] = [];
 
     let path: string[] = [];
     let objectStarts: number[] = [];
@@ -321,7 +321,7 @@ export function parseJSONStream(objectPaths: string[][]) {
                         }
                     }
 
-                    let object = JSON.parse(textDecoder.decode(totalBuffer.subarray(objectStarts[objectStarts.length - 1], index + 1 + indexOffset)));
+                    let object = textDecoder.decode(totalBuffer.subarray(objectStarts[objectStarts.length - 1], index + 1 + indexOffset));
 
                     objectCallbacks.forEach(callback => callback(path, object));
                 }
@@ -347,7 +347,7 @@ export function parseJSONStream(objectPaths: string[][]) {
             totalBuffer = new Uint8Array(0);
             p.finish();
         },
-        onObject(callback: (path: string[], value: any) => void) {
+        onObject(callback: (path: string[], value: string) => void) {
             objectCallbacks.push(callback);
         }
     };
