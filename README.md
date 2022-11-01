@@ -10,7 +10,7 @@ There is a single function, `parseJSONStream`. This is to be called with a singl
 
 # Example
 ```js
-import { parseJSONStream } from './parse-json-stream.js';
+import { parseJSONStream } from "@andrewperson/parse-json-stream.js";
 
 const watchPaths = [
     ["token"],
@@ -42,7 +42,7 @@ const json = `{
 let parser = parseJSONStream(watchPaths);
 
 parser.onObject((path, obj) => {
-    console.log(`${path.join(".")}: ${JSON.stringify(obj)}`);
+    console.log(`${path.join(".")}: ${obj}`);
 });
 
 let textEncoder = new TextEncoder();
@@ -55,8 +55,22 @@ for (let i = 20; i < json.length; i += 20) {
 parser.finish();
 
 /* Output:
-token: {"access_token":"","refresh_token":"","expires_in":0,"termination":0}
-data.dailytimetable: {"date":"0000-00-00"}
-data.timetable: {"subjects":[{"title":"ABC","teacher":"DEF"}]}
+token: {
+        "access_token": "",
+        "refresh_token": "",
+        "expires_in": 0,
+        "termination": 0
+    }
+data.dailytimetable: {
+            "date": "0000-00-00"
+        }
+data.timetable: {
+            "subjects": [
+                {
+                    "title": "ABC",
+                    "teacher": "DEF"
+                }
+            ]
+        }
 */
 ```
