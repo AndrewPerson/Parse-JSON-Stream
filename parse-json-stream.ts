@@ -317,7 +317,7 @@ export function parseJSONStream(objectPaths: string[][]) {
                 if (path.length == possiblePath.length) {
                     for (let i = 0; i < path.length; i++) {
                         if (path[i] != possiblePath[i] && possiblePath[i] != "*") {
-                            return;
+                            break;
                         }
                     }
 
@@ -326,7 +326,7 @@ export function parseJSONStream(objectPaths: string[][]) {
                     objectCallbacks.forEach(callback => callback(path, object));
                 }
             }
-            
+
             path.pop();
             objectStarts.pop();
         }
