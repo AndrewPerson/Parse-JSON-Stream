@@ -9,7 +9,7 @@
   },
   "name": "@andrewperson/parse-json-stream",
   "description": "Allows you to sequentially parse JSON from an incoming stream",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "parse-json-stream.js",
   "author": "",
   "license": "ISC",
