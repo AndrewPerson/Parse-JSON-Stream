@@ -3,11 +3,8 @@
     "build": "npx esbuild ./parse-json-stream.ts --outfile=parse-json-stream.js --bundle --format=esm --minify",
     "test": ""
   },
-  "dependencies": {
-    "esbuild-linux-64": "^0.15.12"
-  },
   "devDependencies": {
-    "esbuild": "^0.15.12",
+    "esbuild": "^0.17.17",
     "typescript": "^4.8.4"
   },
   "name": "@andrewperson/parse-json-stream",
