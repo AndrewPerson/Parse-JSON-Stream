@@ -85,8 +85,6 @@ export function parseJSONStream() {
             totalBuffer = newTotalBuffer;
 
             parser.parse(buffer);
-
-            return this;
         },
         finish() {
             totalBuffer = new Uint8Array(0);
