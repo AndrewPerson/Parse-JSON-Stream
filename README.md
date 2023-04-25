@@ -2,20 +2,16 @@
 This library allows you to parse JSON from an incoming stream and add listeners for when certain objects are found.
 
 # Usage
-There is a single function, `parseJSONStream`. This is to be called with a single parameter, a list of lists of strings. This list represents the paths for the objects you wish to receive events for. See the example below.
+There is a single function, `parseJSONStream`. This returns an object, the parser, which is then further used.
 
-# Limitations
- - Recursive paths are not supported.
- - Arrays are ignored, meaning you cannot receive events for objects in arrays.
+The parser has 3 functions:
+1. `onStructure`: This takes a `string[]`, the path to the object/array(s) that will cause the callback to fire. It takes the callback as its 2nd argument.
+2. `write`: This takes a `Uint8Array` representing the next sequential bytes of the json and writes it to the parser, which parses it and fires off the necessary callbacks.
+3. `finish`: This closes the parser and finalises any parsing remaining.
 
 # Example
 ```js
 import { parseJSONStream } from "@andrewperson/parse-json-stream.js";
-
-const watchPaths = [
-    ["token"],
-    ["data", "*"]
-];
 
 const json = `{
     "token": {
@@ -39,11 +35,9 @@ const json = `{
     }
 }`;
 
-let parser = parseJSONStream(watchPaths);
-
-parser.onObject((path, obj) => {
-    console.log(`${path.join(".")}: ${obj}`);
-});
+let parser = parseJSONStream()
+    .onStructure(["token"], (token, _) => console.log(`token: ${token}`))
+    .onStructure(["data", "*"], (data, path) => console.log(`${path.join(".")}: ${data}`));
 
 let textEncoder = new TextEncoder();
 
