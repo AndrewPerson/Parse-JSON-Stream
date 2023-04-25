@@ -1,5 +1,8 @@
-export declare function parseJSONStream(objectPaths: string[][]): {
-    write(buffer: Uint8Array): void;
+export declare function parseJSONStream(): {
+    write(buffer: Uint8Array): any;
     finish(): void;
-    onObject(callback: (path: string[], value: string) => void): void;
+    /**
+     * A "structure" is an array or an object
+     */
+    onStructure(path: string[], callback: (value: string, path: string[]) => void): any;
 };
