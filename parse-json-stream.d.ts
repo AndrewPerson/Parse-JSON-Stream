@@ -1,5 +1,5 @@
 export declare function parseJSONStream(): {
-    write(buffer: Uint8Array): any;
+    write(buffer: Uint8Array): void;
     finish(): void;
     /**
      * A "structure" is an array or an object
