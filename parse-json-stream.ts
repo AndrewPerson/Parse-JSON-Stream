@@ -1,29 +1,37 @@
 import { JSONParser } from "./parser";
 
 type Structure = {
-    type: "object" | "array",
-    start: number,
-    name: string | null
+    type: "object" | "array";
+    start: number;
+    name: string | null;
 };
 
 type Array = Structure & {
-    type: "array",
-    currentIndex: number
-}
-
-type Object = Structure & {
-    type: "object",
+    type: "array";
+    currentIndex: number;
 };
 
-export function parseJSONStream() {
+type Object = Structure & {
+    type: "object";
+};
+
+export type JSONStreamParser = {
+    onStructure(path: string[], callback: (value: string, path: string[]) => void | Promise<void>): JSONStreamParser;
+    write(buffer: Uint8Array): void;
+    finish(): void;
+};
+
+export function parseJSONStream(): JSONStreamParser {
     const textDecoder = new TextDecoder();
     let totalBuffer = new Uint8Array(0);
     let indexOffset = 0;
 
-    let structureCallbacks = new Map<string[], ((value: string, path: string[]) => void)[]>();
+    let structureCallbacks = new Map<string[], ((value: string, path: string[]) => void | Promise<void>)[]>();
 
     let structures: (Array | Object)[] = [];
     let possiblePathName: string | null = null;
+
+    let promiseCallbacks: Promise<void>[] = [];
 
     function onStartStructure(type: "object" | "array") {
         return (startCharIndex: number) => {
@@ -60,7 +68,10 @@ export function parseJSONStream() {
 
                 let structure = textDecoder.decode(totalBuffer.subarray(structures[structures.length - 1].start, lastCharIndex + 1 + indexOffset));
 
-                structureCallbacks.get(possiblePath)!.forEach(callback => callback(structure, path));
+                structureCallbacks.get(possiblePath)!.forEach(callback => {
+                    const result = callback(structure, path)
+                    if (result instanceof Promise) promiseCallbacks.push(result);
+                });
             }
         }
 
@@ -86,14 +97,15 @@ export function parseJSONStream() {
 
             parser.parse(buffer);
         },
-        finish() {
+        async finish() {
             totalBuffer = new Uint8Array(0);
             parser.finish();
+            await Promise.all(promiseCallbacks);
         },
         /**
          * A "structure" is an array or an object
          */
-        onStructure(path: string[], callback: (value: string, path: string[]) => void) {
+        onStructure(path: string[], callback: (value: string, path: string[]) => void | Promise<void>) {
             if (structureCallbacks.has(path)) {
                 structureCallbacks.get(path)!.push(callback);
             }

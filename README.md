@@ -7,7 +7,7 @@ There is a single function, `parseJSONStream`. This returns an object, the parse
 The parser has 3 functions:
 1. `onStructure`: This takes a `string[]`, the path to the object/array(s) that will cause the callback to fire. It takes the callback as its 2nd argument.
 2. `write`: This takes a `Uint8Array` representing the next sequential bytes of the json and writes it to the parser, which parses it and fires off the necessary callbacks.
-3. `finish`: This closes the parser and finalises any parsing remaining.
+3. `finish`: This closes the parser and finalises any parsing and callbacks remaining.
 
 # Example
 ```js
@@ -46,7 +46,7 @@ for (let i = 20; i < json.length; i += 20) {
     parser.write(textEncoder.encode(json.substring(i - 20, Math.min(i, json.length))));
 }
 
-parser.finish();
+parser.finish(); // We should be using `await` here, but this isn't an async function. 🤷
 
 /* Output:
 token: {
