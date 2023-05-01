@@ -36,6 +36,7 @@ export function parseJSONStream(): JSONStreamParser {
     function onStartStructure(type: "object" | "array") {
         return (startCharIndex: number) => {
             const prevStructure = structures[structures.length - 1] as Array | Object | undefined;
+
             if (prevStructure?.type == "array") {
                 structures.push({
                     type,
@@ -58,17 +59,22 @@ export function parseJSONStream(): JSONStreamParser {
     function onEndStructure(lastCharIndex: number) {
         const path = structures.map(structure => structure.name).filter(name => name != null) as string[];
 
-        for (let possiblePath of structureCallbacks.keys()) {
+        for (const [possiblePath, callbacks] of structureCallbacks.entries()) {
             if (path.length == possiblePath.length) {
+                let validPath = true;
+
                 for (let i = 0; i < path.length; i++) {
                     if (path[i] != possiblePath[i] && possiblePath[i] != "*") {
+                        validPath = false;
                         break;
                     }
                 }
 
-                let structure = textDecoder.decode(totalBuffer.subarray(structures[structures.length - 1].start, lastCharIndex + 1 + indexOffset));
+                if (!validPath) continue;
 
-                structureCallbacks.get(possiblePath)!.forEach(callback => {
+                const structure = textDecoder.decode(totalBuffer.subarray(structures[structures.length - 1].start, lastCharIndex + 1 + indexOffset));
+
+                callbacks.forEach(callback => {
                     const result = callback(structure, path)
                     if (result instanceof Promise) promiseCallbacks.push(result);
                 });
