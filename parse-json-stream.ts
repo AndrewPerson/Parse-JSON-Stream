@@ -81,6 +81,7 @@ export function parseJSONStream(): JSONStreamParser {
             }
         }
 
+        possiblePathName = null;
         structures.pop();
     }
 
@@ -89,7 +90,8 @@ export function parseJSONStream(): JSONStreamParser {
         onStartObject: onStartStructure("object"),
         onEndObject: onEndStructure,
         onStartArray: onStartStructure("array"),
-        onEndArray: onEndStructure
+        onEndArray: onEndStructure,
+        onComma: () => possiblePathName = null
     });
 
     return {

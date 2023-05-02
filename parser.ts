@@ -32,6 +32,7 @@ export type Callbacks = {
     onEndObject: (lastCharIndex: number) => void;
     onStartArray: (startCharIndex: number) => void;
     onEndArray: (lastCharIndex: number) => void;
+    onComma: (charIndex: number) => void;
 }
 
 export class JSONParser {
@@ -71,6 +72,7 @@ export class JSONParser {
                         case 0x3a: // `:`
                             continue;
                         case 0x2c: // `,`
+                            this.callbacks.onComma(i);
                             continue;
                         case 0x74: // `t`
                             this.state = State.TRUE1;
